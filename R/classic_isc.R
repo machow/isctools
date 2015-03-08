@@ -17,10 +17,10 @@ item.rel = function(M, is.corr=FALSE){
   }
   else if (class(M) == 'lavaan') {
     # M is lavaan object (probably more R-saavy ways to do this)
-    pars = parameterEstimates(M, standardized = TRUE)
+    pars = lavaan::parameterEstimates(M, standardized = TRUE)
     loadings = subset(pars, op == '=~') #only factor loadings
     newnames = c(std.all='rel', lhs='factor', rhs='item')
-    rename(loadings, newnames)[,newnames]
+    plyr::rename(loadings, newnames)[,newnames]
     
     #ddply(loadings, .(lhs), summarize, isc = mean(est))  
   }
@@ -48,7 +48,7 @@ item.ic = function(M, M2=NULL, lower=TRUE){
   # inter-item correlation (average off-diag corr)
   if (class(M) == 'lavaan'){
     lam = inspect(M)$lambda         # dataframe of indices to items for each factor
-    Sigma = fitted(M)$cov
+    Sigma = lavaan::fitted(M)$cov
     ic = alply(lam, 2, function(arr) {
       indx = which(arr != 0)
       Sigma[indx,indx]
@@ -74,7 +74,7 @@ item.ic = function(M, M2=NULL, lower=TRUE){
 group.rel = function(M1){
   if (class(M1) == 'lavaan'){
     # latent variable reliability
-    reliability(M1)
+    semTools::reliability(M1)
   }
 }
 
@@ -86,7 +86,7 @@ group.rel = function(M1){
 group.cor = function(M1, M2){
   if (class(M1) == 'lavaan'){
     # latent variable correlations
-    pars = parameterEstimates(M1, standardize=TRUE)
+    pars = lavaan::parameterEstimates(M1, standardize=TRUE)
     latent.vars = unique(pars[pars$op == "=~", 'lhs'])
     latent.pars = subset(pars, op == '~~' & lhs %in% latent.vars)    # get only latent variables
     # make sure variance on latent variables is 1

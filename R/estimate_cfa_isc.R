@@ -1,5 +1,6 @@
 #' Return lavaan model string with factor from each input
 #' @param ... named argument with character array.
+#' @export
 #' @examples
 #' isc.model(f1 = c('a','b'),   # f1 =~ a + b
 #'           f2 = c('x','z'))   # f2 =~ x + z
@@ -29,12 +30,12 @@ fit.isc = function(df, f.names = c('f1', 'f2')){
   )
   
   out = list()
-  out$fit = list(f1 = cfa(model.1f, df, std.ov=TRUE, std.lv=TRUE),
-                 f2 = cfa(model.2f, df, std.ov=TRUE, std.lv=TRUE))
+  out$fit = list(f1 = lavaan::cfa(model.1f, df, std.ov=TRUE, std.lv=TRUE),
+                 f2 = lavaan::cfa(model.2f, df, std.ov=TRUE, std.lv=TRUE))
   
-  out$diff = anova(out$fit$f1, out$fit$f2)
+  out$diff = lavaan::anova(out$fit$f1, out$fit$f2)
   fit.indices = c("chisq", "df", "cfi", "rmsea", "srmr", "mfi", "aic", "bic")
-  out$fit.indices = do.call(rbind, lapply(out$fit, fitMeasures, fit.indices))
+  out$fit.indices = do.call(rbind, lapply(out$fit, lavaan::fitMeasures, fit.indices))
   
   out                                        
 }
