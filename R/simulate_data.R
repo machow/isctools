@@ -37,8 +37,6 @@ lat.cor = function(eta1, eta2, N){
   sqrt(eta1*eta2) / sqrt(var1*var2)
 }
 
-
-
 #' Use spectral decomposition to create data with exact correlation matrix
 #'
 #' @param lambda loadings (correlation with be lambda^2)
@@ -46,12 +44,16 @@ lat.cor = function(eta1, eta2, N){
 #' @param npoints number of observations per participant
 #' @return data.frame with subs columns and npoints rows
 #' @export
-gen.cordata = function(lambda, nsubs, npoints){
+#' @examples
+#' d = gen.cordata(.5, 5, 100)
+#' cor(d)    # correlations are all .25 (lambda^2)
+gen.cordata = function(lambda, nsubs, npoints, C=NULL){
   if (abs(lambda) == 1) return(matrix(rep(rnorm(npoints), nsubs), ncol=nsubs))
-  C = diag(1, ncol=nsubs, nrow=nsubs)
-  C[lower.tri(C)] = lambda
-  C[upper.tri(C)] = lambda
-  
+  if (is.null(C)){
+    C = diag(1, ncol=nsubs, nrow=nsubs)
+    C[lower.tri(C)] = lambda
+    C[upper.tri(C)] = lambda
+  }
   M = matrix(rnorm(npoints*nsubs), ncol=nsubs)
   scores = scale(princomp(M)$scores)
   
