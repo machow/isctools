@@ -19,8 +19,10 @@ item.rel = function(M, is.corr=FALSE){
     # M is lavaan object (probably more R-saavy ways to do this)
     pars = lavaan::parameterEstimates(M, standardized = TRUE)
     loadings = subset(pars, op == '=~') #only factor loadings
-    newnames = c(std.all='rel', lhs='factor', rhs='item')
-    plyr::rename(loadings, newnames)[,newnames]
+    item.rel = plyr::ddply(loadings, 'rhs', plyr::summarize, 
+                                              rel=sqrt(sum(std.all**2)),
+                                              factor=paste(lhs, collapse='.'))
+    plyr::rename(item.rel, c(rhs='item'))
     
     #ddply(loadings, .(lhs), summarize, isc = mean(est))  
   }
