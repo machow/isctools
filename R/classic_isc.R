@@ -8,7 +8,7 @@
 #' @param is.corr boolean indicating if M is a corraltion matrix
 #' @return array with item-total correlation for each column
 #' @export
-item.rel = function(M, is.corr=FALSE){
+item.rel = function(M, is.corr=FALSE, M2=M){
   if (is.corr){
     # M is a correlation matrix
     covttl = sum(M)
@@ -28,7 +28,7 @@ item.rel = function(M, is.corr=FALSE){
   }
   else {
     # use means to calculate item-total correlation
-    ttl = rowSums(M)
+    ttl = rowSums(M2)
     out = laply(colnames(M), function(name){
       #data.frame(sub=name, rel=cor(M[,name], ttl - M[,name]))
       rel=cor(M[,name], ttl-M[,name])

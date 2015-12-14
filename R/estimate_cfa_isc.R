@@ -5,13 +5,20 @@ orthogonalize <- function(factors){
   paste(var_char, collapse='\n')
 }
 
+#' Return a list where each entry is an array of item names corresponding to a factor.
+#' @export
+group_items <- function(i_names, f.names){
+  list(f1 = grep(f.names[1], i_names, value=TRUE),
+       f2 = grep(f.names[2], i_names, value=TRUE))
+}
+
 #' Return lavaan model string with factor loadings derived from each input
 #' @param ... named argument with character array.
 #' @export
 #' @examples
 #' isc.model(f1 = c('a','b'),   # f1 =~ a + b
 #'           f2 = c('x','z'))   # f2 =~ x + z
-isc.model = function(...){
+isc.model <- function(...){
   inputs = list(...)
   factors = lapply(names(inputs), function(k){
     paste0(k, ' =~ ', paste(inputs[[k]], collapse=' + '))

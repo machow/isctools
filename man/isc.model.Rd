@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_cfa_isc.R
 \name{isc.model}
 \alias{isc.model}
-\title{Return lavaan model string with factor from each input}
+\title{Return lavaan model string with factor loadings derived from each input}
 \usage{
 isc.model(...)
 }
@@ -10,7 +10,7 @@ isc.model(...)
 \item{...}{named argument with character array.}
 }
 \description{
-Return lavaan model string with factor from each input
+Return lavaan model string with factor loadings derived from each input
 }
 \examples{
 isc.model(f1 = c('a','b'),   # f1 =~ a + b
